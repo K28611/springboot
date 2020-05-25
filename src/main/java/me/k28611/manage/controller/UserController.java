@@ -62,13 +62,18 @@ public class UserController {
     EmailService emailService;
     @Autowired
     RedisUtil redisUtil;
-
-
-
     @Bean
     public BCryptPasswordEncoder encoder() {
         return new BCryptPasswordEncoder();
     }
+
+    /**
+     * @Description:获取图片验证码
+
+     * @param request
+     * @param response
+     * @return
+     **/
 
     @JwtIgnore
     @GetMapping("/getVerImg")
@@ -93,6 +98,15 @@ public class UserController {
             out.close();
         }
     }
+
+    /**
+     * @Description:登录接口
+
+     * @param param
+     * @param request
+     * @return me.k28611.manage.utils.JsonResult
+     **/
+
     @PostMapping("/login")
     @ResponseBody
     @JwtIgnore
@@ -101,11 +115,8 @@ public class UserController {
 
         Integer account = Integer.parseInt(param.get("account"));
         String passWord = param.get("password");
-        HrMember user1 = userService.findUsersByAccount(account);
-        System.out.println(user1);
         try {
             if (StringUtils.isEmpty(account) || StringUtils.isEmpty(passWord)) {
-                //参数为空
                 return new JsonResult(ResultCode.PARAM_IS_BLANK, null);
             } else {
                 HrMember user = userService.findUsersByAccount(account);
@@ -125,28 +136,6 @@ public class UserController {
         }
     }
 
-    @JwtIgnore
-    @RequestMapping("/test")
-    public File test() {
-        try {
-            File file = fileService.downloadFile("/tmp/a.txt");
-            return file;
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
-        return null;
-    }
-
-
-    @PostMapping("/email")
-    public String sendEmail(@RequestParam("emailAddress") String emailAddress) {
-        try {
-            emailService.sendEmailVerCode(emailAddress, VerCodeGenerateUtils.generateVerCode(4));
-            return "success";
-        } catch (MailSendException e) {
-            return "fail";
-        }
-    }
 
     @JwtIgnore
     @PostMapping("/getBackPssword")
@@ -192,6 +181,14 @@ public class UserController {
         }
     }
 
+    /**
+     * @Description:获取邮箱验证码接口
+
+     * @param param
+     * @param request
+     * @return me.k28611.manage.utils.JsonResult
+     **/
+
     @JwtIgnore
     @PostMapping("/getEmailVercode")
     public JsonResult getEmailVercode(@RequestBody Map<String, String> param, HttpServletRequest request) throws NoSuchAlgorithmException, UnsupportedEncodingException {
@@ -214,6 +211,15 @@ public class UserController {
         }
         return new JsonResult(ResultCode.SUCCESS,verID);
     }
+
+    /**
+     * @Description:注册接口
+
+     * @param file
+     * @param user
+     * @return me.k28611.manage.utils.JsonResult
+     **/
+
     @JwtIgnore
     @PostMapping("/register")
     public JsonResult register(@RequestParam("headIMG") MultipartFile file,@RequestParam("user") String user) throws Exception {
@@ -249,42 +255,12 @@ public class UserController {
         return new JsonResult(ResultCode.FAIL,null);
 
     }
-    public byte[] toByteArray (Object obj) {
-        byte[] bytes = null;
-        ByteArrayOutputStream bos = new ByteArrayOutputStream();
-        try {
-            ObjectOutputStream oos = new ObjectOutputStream(bos);
-            oos.writeObject(obj);
-            oos.flush();
-            bytes = bos.toByteArray();
-            oos.close();
-            bos.close();
-        } catch (IOException ex) {
-            ex.printStackTrace();
-        }
-        return bytes;
-    }
-    public File getFileFromBytes(byte[] b, String outputFile) {
-        BufferedOutputStream stream = null;
-        File file = null;
-        try {
-            file = new File(outputFile);
-            FileOutputStream fstream = new FileOutputStream(file);
-            stream = new BufferedOutputStream(fstream);
-            stream.write(b);
-        } catch (Exception e) {
-            e.printStackTrace();
-        } finally {
-            if (stream != null) {
-                try {
-                    stream.close();
-                } catch (IOException e1) {
-                    e1.printStackTrace();
-                }
-            }
-        }
-        return file;
-    }
+
+    /**
+     * @Description:生成账户
+     * @param
+     * @return int
+     **/
 
     private int GenerateAccount(){
         Random random = new Random();

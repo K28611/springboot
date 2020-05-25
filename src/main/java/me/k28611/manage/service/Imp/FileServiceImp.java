@@ -33,7 +33,6 @@ public class FileServiceImp implements FileService {
             }
             sftp.put(inputStream,fileName);
             return true;
-
         }catch (Exception e){
             log.error("Upload file error path:{}",targetPath);
             throw new Exception("Upload file failed");
@@ -60,6 +59,7 @@ public class FileServiceImp implements FileService {
             outputStream = new FileOutputStream(file);
             sftp.get(targetPath,outputStream);
             log.info("Download file success. TargetPath:{}",targetPath);
+
             return file;
         } catch (Exception e) {
             log.error("Download file failed.TargetPath:{}",targetPath);
