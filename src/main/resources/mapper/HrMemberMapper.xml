@@ -1,0 +1,58 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="me.k28611.manage.dao.HrMemberMapper">
+  <resultMap id="BaseResultMap" type="me.k28611.manage.model.po.HrMember">
+    <id column="WorkNO" jdbcType="INTEGER" property="workno" />
+    <result column="UserName" jdbcType="VARCHAR" property="username" />
+    <result column="Password" jdbcType="VARCHAR" property="password" />
+    <result column="Authority" jdbcType="VARCHAR" property="authority" />
+    <result column="Note" jdbcType="VARCHAR" property="note" />
+    <result column="IsValid" jdbcType="BIT" property="isvalid" />
+    <result column="Email" jdbcType="VARCHAR" property="email" />
+    <result column="AccountNo" jdbcType="INTEGER" property="accountno" />
+    <result column="HeadImgUrl" jdbcType="VARCHAR" property="headimgurl" />
+  </resultMap>
+  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+    delete from HR_Member
+    where WorkNO = #{workno,jdbcType=INTEGER}
+  </delete>
+  <insert id="insert" parameterType="me.k28611.manage.model.po.HrMember">
+    insert into HR_Member (WorkNO, UserName, `Password`, 
+      Authority, Note, IsValid, 
+      Email, AccountNo, HeadImgUrl
+      )
+    values (#{workno,jdbcType=INTEGER}, #{username,jdbcType=VARCHAR}, #{password,jdbcType=VARCHAR}, 
+      #{authority,jdbcType=VARCHAR}, #{note,jdbcType=VARCHAR}, #{isvalid,jdbcType=BIT}, 
+      #{email,jdbcType=VARCHAR}, #{accountno,jdbcType=INTEGER}, #{headimgurl,jdbcType=VARCHAR}
+      )
+  </insert>
+  <update id="updateByPrimaryKey" parameterType="me.k28611.manage.model.po.HrMember">
+    update HR_Member
+    set UserName = #{username,jdbcType=VARCHAR},
+      `Password` = #{password,jdbcType=VARCHAR},
+      Authority = #{authority,jdbcType=VARCHAR},
+      Note = #{note,jdbcType=VARCHAR},
+      IsValid = #{isvalid,jdbcType=BIT},
+      Email = #{email,jdbcType=VARCHAR},
+      AccountNo = #{accountno,jdbcType=INTEGER},
+      HeadImgUrl = #{headimgurl,jdbcType=VARCHAR}
+    where WorkNO = #{workno,jdbcType=INTEGER}
+  </update>
+  <select id="selectByPrimaryKey" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select WorkNO, UserName, `Password`, Authority, Note, IsValid, Email, AccountNo, 
+    HeadImgUrl
+    from HR_Member
+    where WorkNO = #{workno,jdbcType=INTEGER}
+  </select>
+  <select id="selectAll" resultMap="BaseResultMap">
+    select WorkNO, UserName, `Password`, Authority, Note, IsValid, Email, AccountNo, 
+    HeadImgUrl
+    from HR_Member
+  </select>
+  <select id="selectByAccount" parameterType="java.lang.Integer" resultMap="BaseResultMap">
+    select WorkNO, UserName, `Password`, Authority, Note, IsValid, Email, AccountNo,
+    HeadImgUrl
+    from HR_Member
+    where AccountNo = #{account,jdbcType=INTEGER}
+  </select>
+</mapper>
